@@ -21,9 +21,10 @@ with st.expander('Analyze Text'):
 
         st.subheader('SHAP Values:')
         st.text("Explanation of SHAP values...")
-        shap.plots.text(shap_values[:, :, "Bullish"])
-        shap.plots.text(shap_values[:, :, "Neutral"])
-        shap.plots.text(shap_values[:, :, "Bearish"])
+        print(shap_values)
+        st.pyplot(shap.plots.text(shap_values[:, :, "Bullish"]))
+        st.pyplot(shap.plots.text(shap_values[:, :, "Neutral"]))
+        st.pyplot(shap.plots.text(shap_values[:, :, "Bearish"]))
 
         #st.subheader('Mean SHAP Values for Bearish:')
         #st.text("Explanation of mean SHAP values for Bearish...")
