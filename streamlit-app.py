@@ -51,27 +51,27 @@ with st.expander('Analyze Text'):
         if model_options == "nlptown/bert-base-multilingual-uncased-sentiment":
             st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
             st.text("Negative")
-            st_shap(shap.plots.text(shap_values[:, :, "Negative"])
+            st_shap(shap.plots.text(shap_values[:, :, "Negative"]))
             st.text("Neutral")
-            st_shap(shap.plots.text(shap_values[:, :, "Neutral"])
+            st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
             st.text("Positive")
-            st_shap(shap.plots.text(shap_values[:, :, "Positive"])
+            st_shap(shap.plots.text(shap_values[:, :, "Positive"]))
         elif model_options == "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis":
             st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
             st.text("Negative")
-            st_shap(shap.plots.text(shap_values[:, :, "negative"])
+            st_shap(shap.plots.text(shap_values[:, :, "negative"]))
             st.text("Neutral")
-            st_shap(shap.plots.text(shap_values[:, :, "neutral"])
+            st_shap(shap.plots.text(shap_values[:, :, "neutral"]))
             st.text("Positive")
-            st_shap(shap.plots.text(shap_values[:, :, "positive"])
+            st_shap(shap.plots.text(shap_values[:, :, "positive"]))
         elif model_options == "ElKulako/cryptobert":
             st.text("Bullish: Positive sentiment, Neutral: Neutral sentiment, Bearish: Negative sentiment")
             st.text("Bullish")
-            st_shap(shap.plots.text(shap_values[:, :, "Bullish"])
+            st_shap(shap.plots.text(shap_values[:, :, "Bullish"]))
             st.text("Neutral")
-            st_shap(shap.plots.text(shap_values[:, :, "Neutral"])
+            st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
             st.text("Bearish")
-            st_shap(shap.plots.text(shap_values[:, :, "Bearish"])
+            st_shap(shap.plots.text(shap_values[:, :, "Bearish"]))
 
 # Analyze Twitter/X Link
 with st.expander('Analyze Twitter/X Link'):
