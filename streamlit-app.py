@@ -73,15 +73,37 @@ with st.expander('Analyze Text'):
             st.text("Bearish")
             st_shap(shap.plots.text(shap_values[:, :, "Bearish"]))
 
+import requests
+from bs4 import BeautifulSoup
+
+def extract_text_from_twitter_post(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
+            # Find the element containing the text content of the tweet
+            tweet_text_element = soup.find('div', {'class': 'css-901oao r-hkyrab r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0'})
+            if tweet_text_element:
+                return tweet_text_element.text.strip()
+            else:
+                return "Text not found in Twitter post."
+        else:
+            return "Failed to retrieve Twitter post. Status code: " + str(response.status_code)
+    except Exception as e:
+        return "Error: " + str(e)
+
+# Streamlit UI
+st.header('Sentiment Analysis')
+
 # Analyze Twitter/X Link
 with st.expander('Analyze Twitter/X Link'):
     link = st.text_input('Twitter/X Link here: ')
 
     if link:
-        with st.spinner('Calculating...'):
-            explainer = shap.Explainer(pipe)
-            shap_values = explainer([text])  # Pass text directly as a list
-
-        st.subheader('SHAP Values:')
-        st.text("Explanation of SHAP values...")
-        st.write(shap_values)  # Display SHAP values
+        with st.spinner('Crawling Twitter post...'):
+            tweet_text = extract_text_from_twitter_post(link)
+            if "Error" not in tweet_text and "Failed" not in tweet_text:
+                st.write("Extracted text from Twitter post:")
+                st.write(tweet_text)
+            else:
+                st.write(tweet_text)

@@ -8,3 +8,5 @@ matplotlib
 seaborn
 ipython
 streamlit-shap
+requests
+bs4
