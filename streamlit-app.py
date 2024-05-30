@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import cleantext
+import streamlit-shap
 import shap
 from transformers import TextClassificationPipeline, AutoModelForSequenceClassification, AutoTokenizer
 
@@ -22,9 +23,9 @@ with st.expander('Analyze Text'):
         st.subheader('SHAP Values:')
         st.text("Explanation of SHAP values...")
         print(shap_values)
-        st.pyplot(shap.plots.text(shap_values[:, :, "Bullish"]))
-        st.pyplot(shap.plots.text(shap_values[:, :, "Neutral"]))
-        st.pyplot(shap.plots.text(shap_values[:, :, "Bearish"]))
+        st_shap(shap.plots.text(shap_values[:, :, "Bullish"]))
+        st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
+        st_shap(shap.plots.text(shap_values[:, :, "Bearish"]))
 
         #st.subheader('Mean SHAP Values for Bearish:')
         #st.text("Explanation of mean SHAP values for Bearish...")
