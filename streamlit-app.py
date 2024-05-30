@@ -48,8 +48,12 @@ with st.expander('Analyze Text'):
         st.subheader('SHAP Values:')
         st.text("Explanation of SHAP values...")
         shap_values
+        st.text("Bullish: Positive sentiment, Neutral: Neutral sentiment, Bearish: Negative sentiment")
+        st.text("Bullish")
         st_shap(shap.plots.text(shap_values[:, :, "Bullish"]))
+        st.text("Neutral")
         st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
+        st.text("Bearish")
         st_shap(shap.plots.text(shap_values[:, :, "Bearish"]))
 
 # Analyze Twitter/X Link
