@@ -24,7 +24,7 @@ model_options = [
     "distilbert-base-uncased",
     "bert-base-uncased",
     "roberta-base",
-    "cryptobert"
+    "ElKulako/cryptobert"
 ]
 
 selected_model = st.selectbox("Select Hugging Face model", model_options)
