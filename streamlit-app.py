@@ -48,7 +48,7 @@ with st.expander('Analyze Text'):
         st.text("Explanation of SHAP values...")
         shap_values
 
-        if model_options == "nlptown/bert-base-multilingual-uncased-sentiment":
+        if selected_model == "nlptown/bert-base-multilingual-uncased-sentiment":
             st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
             st.text("Negative")
             st_shap(shap.plots.text(shap_values[:, :, "Negative"]))
@@ -56,7 +56,7 @@ with st.expander('Analyze Text'):
             st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
             st.text("Positive")
             st_shap(shap.plots.text(shap_values[:, :, "Positive"]))
-        elif model_options == "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis":
+        elif selected_model == "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis":
             st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
             st.text("Negative")
             st_shap(shap.plots.text(shap_values[:, :, "negative"]))
@@ -64,7 +64,7 @@ with st.expander('Analyze Text'):
             st_shap(shap.plots.text(shap_values[:, :, "neutral"]))
             st.text("Positive")
             st_shap(shap.plots.text(shap_values[:, :, "positive"]))
-        elif model_options == "ElKulako/cryptobert":
+        elif selected_model == "ElKulako/cryptobert":
             st.text("Bullish: Positive sentiment, Neutral: Neutral sentiment, Bearish: Negative sentiment")
             st.text("Bullish")
             st_shap(shap.plots.text(shap_values[:, :, "Bullish"]))
