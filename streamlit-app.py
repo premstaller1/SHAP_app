@@ -24,6 +24,6 @@ with st.expander('Analyze Text'):
         st.image(shap.plots.text(shap_values[:, :, "Neutral"]), use_column_width=True, caption='Neutral')
         st.image(shap.plots.text(shap_values[:, :, "Bearish"]), use_column_width=True, caption='Bearish')
 
-        st.subheader('Mean SHAP Values for Bearish:')
-        st.text("Explanation of mean SHAP values for Bearish...")
-        st.image(shap.plots.bar(shap_values[:, :, "Bearish"].mean(0)), use_column_width=True)
+        #st.subheader('Mean SHAP Values for Bearish:')
+        #st.text("Explanation of mean SHAP values for Bearish...")
+        #st.image(shap.plots.bar(shap_values[:, :, "Bearish"].mean(0)), use_column_width=True)
