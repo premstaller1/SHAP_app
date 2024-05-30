@@ -38,22 +38,19 @@ if selected_model == "Own Model":
 else:
     pipe = load_model(selected_model)
 
-# Button to run the analysis
-if st.button("Run Analysis"):
-    # Analyze Text
-    with st.expander('Analyze Text'):
-        text = st.text_input('Text here: ')
-        if text:
-            with st.spinner('Calculating...'):
-                explainer = shap.Explainer(pipe)
-                shap_values = explainer([text])  # Pass text directly as a list
+with st.expander('Analyze Text'):
+    text = st.text_input('Text here: ')
+    if text:
+        with st.spinner('Calculating...'):
+            explainer = shap.Explainer(pipe)
+            shap_values = explainer([text])  # Pass text directly as a list
 
-            st.subheader('SHAP Values:')
-            st.text("Explanation of SHAP values...")
-            shap_values
-            st_shap(shap.plots.text(shap_values[:, :, "Bullish"]))
-            st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
-            st_shap(shap.plots.text(shap_values[:, :, "Bearish"]))
+        st.subheader('SHAP Values:')
+        st.text("Explanation of SHAP values...")
+        shap_values
+        st_shap(shap.plots.text(shap_values[:, :, "Bullish"]))
+        st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
+        st_shap(shap.plots.text(shap_values[:, :, "Bearish"]))
 
 # Analyze Twitter/X Link
 with st.expander('Analyze Twitter/X Link'):
