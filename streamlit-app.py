@@ -78,17 +78,16 @@ from bs4 import BeautifulSoup
 
 def extract_text_from_twitter_post(url):
     try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.text, 'html.parser')
-            # Find the element containing the text content of the tweet
-            tweet_text_element = soup.find('div', {'class': 'css-901oao r-hkyrab r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0'})
-            if tweet_text_element:
-                return tweet_text_element.text.strip()
-            else:
-                return "Text not found in Twitter post."
+        response = requests.get(url).text
+        soup = BeautifulSoup(response, "lxml")
+        tweet_text = soup.find("p", {"class": "TweetTextSize TweetTextSize--jumbo js-tweet-text tweet-text"})
+        dest = soup.find('a', {"class": "twitter-timeline-link u-hidden"})
+        if dest:
+            dest.decompose()
+        if tweet_text:
+            return tweet_text.text.strip()
         else:
-            return "Failed to retrieve Twitter post. Status code: " + str(response.status_code)
+            return "Text not found in Twitter post."
     except Exception as e:
         return "Error: " + str(e)
 
@@ -102,7 +101,7 @@ with st.expander('Analyze Twitter/X Link'):
     if link:
         with st.spinner('Crawling Twitter post...'):
             tweet_text = extract_text_from_twitter_post(link)
-            if "Error" not in tweet_text and "Failed" not in tweet_text:
+            if "Error" not in tweet_text and "Text not found" not in tweet_text:
                 st.write("Extracted text from Twitter post:")
                 st.write(tweet_text)
             else:
