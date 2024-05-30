@@ -21,9 +21,8 @@ st.header('Sentiment Analysis')
 
 # Model selection
 model_options = [
-    "distilbert-base-uncased",
-    "bert-base-uncased",
-    "roberta-base",
+    "nlptown/bert-base-multilingual-uncased-sentiment",
+    "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis",
     "ElKulako/cryptobert",
     "Own Model"
 ]
