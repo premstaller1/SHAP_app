@@ -15,14 +15,15 @@ st.header('Sentiment Analysis')
 with st.expander('Analyze Text'):
     text = st.text_input('Text here: ')
     if text:
-        explainer = shap.Explainer(pipe)
-        shap_values = explainer([text])  # Pass text directly as a list
+        with st.spinner('Calculating...'):
+            explainer = shap.Explainer(pipe)
+            shap_values = explainer([text])  # Pass text directly as a list
 
         st.subheader('SHAP Values:')
         st.text("Explanation of SHAP values...")
-        st.image(shap.plots.text(shap_values[:, :, "Bullish"]), use_column_width=True, caption='Bullish')
-        st.image(shap.plots.text(shap_values[:, :, "Neutral"]), use_column_width=True, caption='Neutral')
-        st.image(shap.plots.text(shap_values[:, :, "Bearish"]), use_column_width=True, caption='Bearish')
+        shap.plots.text(shap_values[:, :, "Bullish"])
+        shap.plots.text(shap_values[:, :, "Neutral"])
+        shap.plots.text(shap_values[:, :, "Bearish"])
 
         #st.subheader('Mean SHAP Values for Bearish:')
         #st.text("Explanation of mean SHAP values for Bearish...")
