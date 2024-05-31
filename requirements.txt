@@ -10,3 +10,4 @@ ipython
 streamlit-shap
 requests
 bs4
+numpy

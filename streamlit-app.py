@@ -4,6 +4,8 @@ import cleantext
 from streamlit_shap import st_shap
 import shap
 from transformers import TextClassificationPipeline, AutoModelForSequenceClassification, AutoTokenizer
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Function to load the selected Hugging Face model
 def load_model(model_name):
