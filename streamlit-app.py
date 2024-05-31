@@ -50,11 +50,17 @@ with st.expander('Analyze Text'):
     text = st.text_input('Text here: ')
     if text:
         with st.spinner('Calculating...'):
+            # Update text to indicate the progress
+            st.text("Model 1: Calculating SHAP values...")
             explainer1 = shap.Explainer(pipe1)
             shap_values1 = explainer1([text])  # Pass text directly as a list
+            st.text("Model 1: SHAP values calculated.")
 
+            # Update text to indicate the progress
+            st.text("Model 2: Calculating SHAP values...")
             explainer2 = shap.Explainer(pipe2)
             shap_values2 = explainer2([text])  # Pass text directly as a list
+            st.text("Model 2: SHAP values calculated.")
 
         st.subheader('Sentiment Distribution:')
         sentiment_values1 = np.abs(shap_values1.values).mean(axis=0)
