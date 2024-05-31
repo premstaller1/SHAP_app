@@ -64,19 +64,6 @@ with st.expander('Analyze Text'):
             shap_values2 = explainer2([text])  # Pass text directly as a list
             st.text("Model 2: SHAP values calculated.")
 
-        st.subheader('Sentiment Distribution:')
-        sentiment_labels = shap_values1.output_names
-        sentiment_labels = shap_values2.output_names
-
-        # Plot for model 1
-        plt.bar(np.arange(len(sentiment_labels)) - 0.2, sentiment_values1, width=0.4, label='Model 1')
-        # Plot for model 2
-        plt.bar(np.arange(len(sentiment_labels)) + 0.2, sentiment_values2, width=0.4, label='Model 2')
-
-        plt.xticks(np.arange(len(sentiment_labels)), sentiment_labels)
-        plt.legend()
-        st.pyplot()
-
         if selected_model1 == "nlptown/bert-base-multilingual-uncased-sentiment":
             st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
             st.text("Negative")
