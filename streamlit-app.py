@@ -27,28 +27,50 @@ model_options = [
     "Own Model"
 ]
 
-selected_model = st.selectbox("Select Hugging Face model", model_options)
+selected_model1 = st.selectbox("Select Hugging Face model 1", model_options)
+selected_model2 = st.selectbox("Select Hugging Face model 2", model_options)
 
-# Check if "Own Model" is selected
-if selected_model == "Own Model":
-    custom_model_name = st.text_input("Enter custom Hugging Face model name (optional)")
+# Check if "Own Model" is selected for model 1
+if selected_model1 == "Own Model":
+    custom_model_name = st.text_input("Enter custom Hugging Face model name for Model 1 (optional)")
     if custom_model_name:
-        pipe = load_model(custom_model_name)
+        pipe1 = load_model(custom_model_name)
 else:
-    pipe = load_model(selected_model)
+    pipe1 = load_model(selected_model1)
+
+# Check if "Own Model" is selected for model 2
+if selected_model2 == "Own Model":
+    custom_model_name = st.text_input("Enter custom Hugging Face model name for Model 2 (optional)")
+    if custom_model_name:
+        pipe2 = load_model(custom_model_name)
+else:
+    pipe2 = load_model(selected_model2)
 
 with st.expander('Analyze Text'):
     text = st.text_input('Text here: ')
     if text:
         with st.spinner('Calculating...'):
-            explainer = shap.Explainer(pipe)
-            shap_values = explainer([text])  # Pass text directly as a list
+            explainer1 = shap.Explainer(pipe1)
+            shap_values1 = explainer1([text])  # Pass text directly as a list
 
-        st.subheader('SHAP Values:')
-        st.text("Explanation of SHAP values...")
-        shap_values
+            explainer2 = shap.Explainer(pipe2)
+            shap_values2 = explainer2([text])  # Pass text directly as a list
 
-        if selected_model == "nlptown/bert-base-multilingual-uncased-sentiment":
+        st.subheader('Sentiment Distribution:')
+        sentiment_values1 = np.abs(shap_values1.values).mean(axis=0)
+        sentiment_values2 = np.abs(shap_values2.values).mean(axis=0)
+        sentiment_labels = shap_values1.output_names
+
+        # Plot for model 1
+        plt.bar(np.arange(len(sentiment_labels)) - 0.2, sentiment_values1, width=0.4, label='Model 1')
+        # Plot for model 2
+        plt.bar(np.arange(len(sentiment_labels)) + 0.2, sentiment_values2, width=0.4, label='Model 2')
+
+        plt.xticks(np.arange(len(sentiment_labels)), sentiment_labels)
+        plt.legend()
+        st.pyplot()
+
+        if selected_model1 == "nlptown/bert-base-multilingual-uncased-sentiment":
             st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
             st.text("Negative")
             st_shap(shap.plots.text(shap_values[:, :, "Negative"]))
@@ -56,7 +78,7 @@ with st.expander('Analyze Text'):
             st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
             st.text("Positive")
             st_shap(shap.plots.text(shap_values[:, :, "Positive"]))
-        elif selected_model == "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis":
+        elif selected_model1 == "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis":
             st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
             st.text("Negative")
             st_shap(shap.plots.text(shap_values[:, :, "negative"]))
@@ -64,7 +86,7 @@ with st.expander('Analyze Text'):
             st_shap(shap.plots.text(shap_values[:, :, "neutral"]))
             st.text("Positive")
             st_shap(shap.plots.text(shap_values[:, :, "positive"]))
-        elif selected_model == "ElKulako/cryptobert":
+        elif selected_model1 == "ElKulako/cryptobert":
             st.text("Bullish: Positive sentiment, Neutral: Neutral sentiment, Bearish: Negative sentiment")
             st.text("Bullish")
             st_shap(shap.plots.text(shap_values[:, :, "Bullish"]))
@@ -72,37 +94,3 @@ with st.expander('Analyze Text'):
             st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
             st.text("Bearish")
             st_shap(shap.plots.text(shap_values[:, :, "Bearish"]))
-
-import requests
-from bs4 import BeautifulSoup
-
-def extract_text_from_twitter_post(url):
-    try:
-        response = requests.get(url).text
-        soup = BeautifulSoup(response, "lxml")
-        tweet_text = soup.find("p", {"class": "TweetTextSize TweetTextSize--jumbo js-tweet-text tweet-text"})
-        dest = soup.find('a', {"class": "twitter-timeline-link u-hidden"})
-        if dest:
-            dest.decompose()
-        if tweet_text:
-            return tweet_text.text.strip()
-        else:
-            return "Text not found in Twitter post."
-    except Exception as e:
-        return "Error: " + str(e)
-
-# Streamlit UI
-st.header('Sentiment Analysis')
-
-# Analyze Twitter/X Link
-with st.expander('Analyze Twitter/X Link'):
-    link = st.text_input('Twitter/X Link here: ')
-
-    if link:
-        with st.spinner('Crawling Twitter post...'):
-            tweet_text = extract_text_from_twitter_post(link)
-            if "Error" not in tweet_text and "Text not found" not in tweet_text:
-                st.write("Extracted text from Twitter post:")
-                st.write(tweet_text)
-            else:
-                st.write(tweet_text)
