@@ -65,9 +65,8 @@ with st.expander('Analyze Text'):
             st.text("Model 2: SHAP values calculated.")
 
         st.subheader('Sentiment Distribution:')
-        sentiment_values1 = np.abs(shap_values1.values).mean(axis=0)
-        sentiment_values2 = np.abs(shap_values2.values).mean(axis=0)
         sentiment_labels = shap_values1.output_names
+        sentiment_labels = shap_values2.output_names
 
         # Plot for model 1
         plt.bar(np.arange(len(sentiment_labels)) - 0.2, sentiment_values1, width=0.4, label='Model 1')
