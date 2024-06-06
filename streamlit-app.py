@@ -7,8 +7,6 @@ from transformers import TextClassificationPipeline, AutoModelForSequenceClassif
 import matplotlib.pyplot as plt
 import numpy as np
 
-st.set_frame_height(1200)
-
 # Function to load the selected Hugging Face model
 def load_model(model_name):
     try:
