@@ -24,6 +24,7 @@ def display_shap_values(model_name, shap_values, prediction):
 
     predicted_label = prediction.lower()
     st.text(f"Predicted label: {predicted_label}")
+    predicted_label
     st_shap(shap.plots.text(shap_values[:, :, predicted_label]))
 
 # Streamlit UI
