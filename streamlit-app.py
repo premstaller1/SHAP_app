@@ -54,34 +54,42 @@ if selected_model == "Own Model":
 else:
     pipe = load_model(selected_model)
 
-# Define sections for input and result
+text = st.text_input('Text here: ')
+button_clicked = st.button('Analyze')
+
 with st.expander('Analyze Text', expanded=True):
-    text = st.text_input('Text here: ')
-    button_clicked = st.button('Analyze')
     if button_clicked:
         with st.spinner('Calculating...'):
             # Model predictions and SHAP values
             if pipe:
-                st.write("Calculating SHAP values and predicting label...")
-                explainer = shap.Explainer(pipe)
-                shap_values = explainer([text])  # Pass text directly as a list
-                predictions = pipe(text)
-                prediction = predictions[0][0]['label']
-                st.write("SHAP values and prediction calculated.")
-                st.write(f"Prediction: {prediction}")
-                display_all_labels(predictions)
-
+                try:
+                    st.write("Calculating SHAP values and predicting label...")
+                    explainer = shap.Explainer(pipe)
+                    shap_values = explainer([text])  # Pass text directly as a list
+                    predictions = pipe(text)
+                    prediction = predictions[0][0]['label']
+                    st.write("SHAP values and prediction calculated.")
+                    st.write(f"Prediction: {prediction}")
+                    display_all_labels(predictions)
+                except Exception as e:
+                    st.error(f"Error during prediction: {e}")
 
 # Display SHAP values in a separate section
 with st.expander('SHAP Values', expanded=True):
     if button_clicked:
         with st.spinner('Displaying SHAP values...'):
             if pipe:
-                display_shap_values(shap_values, prediction)
+                try:
+                    display_shap_values(shap_values, prediction)
+                except Exception as e:
+                    st.error(f"Error displaying SHAP values: {e}")
 
 # Display SHAP values in a separate section
 with st.expander('SHAP Predictions', expanded=True):
     if button_clicked:
         with st.spinner('Displaying SHAP Predictions...'):
             if pipe:
-                display_all_labels(predictions)
+                try:
+                    display_all_labels(predictions)
+                except Exception as e:
+                    st.error(f"Error displaying predictions: {e}")
