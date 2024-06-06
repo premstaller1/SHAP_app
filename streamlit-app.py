@@ -20,7 +20,11 @@ def load_model(model_name):
 
 # Function to display SHAP values and explanations based on model type
 def display_shap_values(model_name, shap_values, prediction):
-    st_shap(shap.plots.text(shap_values[:, :, "prediction"]))
+    print("Displaying SHAP values...")
+
+    predicted_label = prediction.lower()
+    st.text(f"Predicted label: {predicted_label}")
+    st_shap(shap.plots.text(shap_values[:, :, predicted_label]))
 
 # Streamlit UI
 st.header('Sentiment Analysis')
