@@ -19,38 +19,14 @@ def load_model(model_name):
         return None
 
 # Function to display SHAP values and explanations based on model type
-def display_shap_values(model_name, shap_values):
-    if model_name == "nlptown/bert-base-multilingual-uncased-sentiment":
-        st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
-        st.text("Negative")
-        st_shap(shap.plots.text(shap_values[:, :, "Negative"]))
-        st.text("Neutral")
-        st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
-        st.text("Positive")
-        st_shap(shap.plots.text(shap_values[:, :, "Positive"]))
-    elif model_name == "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis":
-        st.text("Negative: Negative sentiment, Neutral: Neutral sentiment, Positive: Positive sentiment")
-        st.text("Negative")
-        st_shap(shap.plots.text(shap_values[:, :, "negative"]))
-        st.text("Neutral")
-        st_shap(shap.plots.text(shap_values[:, :, "neutral"]))
-        st.text("Positive")
-        st_shap(shap.plots.text(shap_values[:, :, "positive"]))
-    elif model_name == "ElKulako/cryptobert":
-        st.text("Bullish: Positive sentiment, Neutral: Neutral sentiment, Bearish: Negative sentiment")
-        st.text("Bullish")
-        st_shap(shap.plots.text(shap_values[:, :, "Bullish"]))
-        st.text("Neutral")
-        st_shap(shap.plots.text(shap_values[:, :, "Neutral"]))
-        st.text("Bearish")
-        st_shap(shap.plots.text(shap_values[:, :, "Bearish"]))
+def display_shap_values(model_name, shap_values, prediction):
+    st_shap(shap.plots.text(shap_values[:, :, "prediction"]))
 
 # Streamlit UI
 st.header('Sentiment Analysis')
 
 # Model selection
 model_options = [
-    "nlptown/bert-base-multilingual-uncased-sentiment",
     "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis",
     "ElKulako/cryptobert",
     "Own Model"
@@ -87,7 +63,7 @@ with st.expander('Analyze Text'):
                 prediction1 = pipe1(text)[0]['label']
                 st.text("Model 1: SHAP values and prediction calculated.")
                 st.write(f"Model 1 Prediction: {prediction1}")
-                display_shap_values(selected_model1 if selected_model1 != "Own Model" else custom_model_name1, shap_values1)
+                display_shap_values(selected_model1 if selected_model1 != "Own Model" else custom_model_name1, shap_values1, prediction1)
 
             # Model 2 predictions and SHAP values
             if pipe2:
@@ -97,4 +73,4 @@ with st.expander('Analyze Text'):
                 prediction2 = pipe2(text)[0]['label']
                 st.text("Model 2: SHAP values and prediction calculated.")
                 st.write(f"Model 2 Prediction: {prediction2}")
-                display_shap_values(selected_model2 if selected_model2 != "Own Model" else custom_model_name2, shap_values2)
+                display_shap_values(selected_model2 if selected_model2 != "Own Model" else custom_model_name2, shap_values1, prediction2)
