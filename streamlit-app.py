@@ -27,7 +27,7 @@ def display_shap_values(model_name, shap_values, prediction):
     st.text(f"Predicted label: {predicted_label}")
     predicted_label
     # Display SHAP values
-    st_shap(shap.plots.text(shap_values[:, :, predicted_label]))
+    st_shap(shap.plots.text(shap_values))
 
 # Streamlit UI
 st.header('Sentiment Analysis')
