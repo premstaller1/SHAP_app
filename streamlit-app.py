@@ -12,7 +12,7 @@ def load_model(model_name):
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
         model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=3)
-        pipe = TextClassificationPipeline(model=model, tokenizer=tokenizer, max_length=64, truncation=True,return_all_scores=True, padding='max_length')
+        pipe = TextClassificationPipeline(model=model, tokenizer=tokenizer, max_length=64, truncation=True, top_k=None, padding='max_length')
         return pipe
     except Exception as e:
         st.error(f"Error loading model: {e}")
@@ -21,13 +21,12 @@ def load_model(model_name):
 # Function to display SHAP values and explanations based on model type
 def display_shap_values(shap_values, prediction):
     print("Displaying SHAP values...")
-
+        # Display SHAP values
+    st_shap(shap.plots.text(shap_values))
     # Convert prediction to proper case
     predicted_label = prediction.capitalize()
     st.write(f"Predicted label: {predicted_label}")
     predicted_label
-    # Display SHAP values
-    st_shap(shap.plots.text(shap_values))
 
 # Function to display all labels and their scores
 def display_all_labels(predictions):
