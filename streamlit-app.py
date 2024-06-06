@@ -24,7 +24,7 @@ def display_shap_values(shap_values, prediction):
 
     # Convert prediction to proper case
     predicted_label = prediction.capitalize()
-    st.text(f"Predicted label: {predicted_label}")
+    st.write(f"Predicted label: {predicted_label}")
     predicted_label
     # Display SHAP values
     st_shap(shap.plots.text(shap_values))
@@ -70,7 +70,7 @@ with st.expander('Analyze Text'):
                 shap_values = explainer([text])  # Pass text directly as a list
                 predictions = pipe(text)
                 prediction = predictions[0][0]['label']
-                st.text("SHAP values and prediction calculated.")
+                st.write("SHAP values and prediction calculated.")
                 st.write(f"Prediction: {prediction}")
-                display_shap_values(shap_values, prediction)
                 display_all_labels(predictions)
+                display_shap_values(shap_values, prediction)
