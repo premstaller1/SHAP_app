@@ -11,7 +11,7 @@ import numpy as np
 def load_model(model_name):
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-        model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=3)
+        model = AutoModelForSequenceClassification.from_pretrained(model_name)
         pipe = TextClassificationPipeline(model=model, tokenizer=tokenizer, max_length=64, truncation=True, top_k=None, padding='max_length')
         return pipe
     except Exception as e:
