@@ -72,4 +72,10 @@ with st.expander('Analyze Text'):
                 st.write("SHAP values and prediction calculated.")
                 st.write(f"Prediction: {prediction}")
                 display_all_labels(predictions)
+
+# Display SHAP values in a separate section
+with st.expander('SHAP Values'):
+    if text:
+        with st.spinner('Displaying SHAP values...'):
+            if pipe:
                 display_shap_values(shap_values, prediction)
