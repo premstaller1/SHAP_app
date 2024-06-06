@@ -55,7 +55,7 @@ else:
     pipe = load_model(selected_model)
 
 # Define sections for input and result
-with st.beta_expander('Analyze Text', expanded=True):
+with st.expander('Analyze Text', expanded=True):
     text = st.text_input('Text here: ')
     if text:
         with st.spinner('Calculating...'):
@@ -72,14 +72,14 @@ with st.beta_expander('Analyze Text', expanded=True):
 
 
 # Display SHAP values in a separate section
-with st.beta_expander('SHAP Values', expanded=False):
+with st.expander('SHAP Values', expanded=True):
     if text:
         with st.spinner('Displaying SHAP values...'):
             if pipe:
                 display_shap_values(shap_values, prediction)
 
 # Display SHAP values in a separate section
-with st.beta_expander('SHAP Predictions', expanded=False):
+with st.expander('SHAP Predictions', expanded=True):
     if text:
         with st.spinner('Displaying SHAP Predictions...'):
             if pipe:
