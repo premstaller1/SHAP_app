@@ -54,12 +54,10 @@ if selected_model == "Own Model":
 else:
     pipe = load_model(selected_model)
 
-with st.expander('Input Text', expanded=True):
-    text = st.text_input('Text here: ')
-    button_clicked = st.button('Analyze')
-
 # Define sections for input and result
 with st.expander('Analyze Text', expanded=True):
+    text = st.text_input('Text here: ')
+    button_clicked = st.button('Analyze')
     if button_clicked:
         with st.spinner('Calculating...'):
             # Model predictions and SHAP values
