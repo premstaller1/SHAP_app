@@ -23,10 +23,6 @@ def display_shap_values(shap_values, prediction):
     print("Displaying SHAP values...")
         # Display SHAP values
     st_shap(shap.plots.text(shap_values))
-    # Convert prediction to proper case
-    predicted_label = prediction.capitalize()
-    st.write(f"Predicted label: {predicted_label}")
-    predicted_label
 
 # Function to display all labels and their scores
 def display_all_labels(predictions):
@@ -58,13 +54,14 @@ if selected_model == "Own Model":
 else:
     pipe = load_model(selected_model)
 
-with st.expander('Analyze Text'):
+# Define sections for input and result
+with st.beta_expander('Analyze Text', expanded=True):
     text = st.text_input('Text here: ')
     if text:
         with st.spinner('Calculating...'):
             # Model predictions and SHAP values
             if pipe:
-                st.text("Calculating SHAP values and predicting label...")
+                st.write("Calculating SHAP values and predicting label...")
                 explainer = shap.Explainer(pipe)
                 shap_values = explainer([text])  # Pass text directly as a list
                 predictions = pipe(text)
@@ -73,9 +70,17 @@ with st.expander('Analyze Text'):
                 st.write(f"Prediction: {prediction}")
                 display_all_labels(predictions)
 
+
 # Display SHAP values in a separate section
-with st.expander('SHAP Values'):
+with st.beta_expander('SHAP Values', expanded=False):
     if text:
         with st.spinner('Displaying SHAP values...'):
             if pipe:
                 display_shap_values(shap_values, prediction)
+
+# Display SHAP values in a separate section
+with st.beta_expander('SHAP Predictions', expanded=False):
+    if text:
+        with st.spinner('Displaying SHAP Predictions...'):
+            if pipe:
+                display_all_labels(predictions)
