@@ -57,18 +57,18 @@ else:
 # Define sections for input and result
 with st.expander('Analyze Text', expanded=True):
     text = st.text_input('Text here: ')
-    if text:
-        with st.spinner('Calculating...'):
-            # Model predictions and SHAP values
-            if pipe:
-                st.write("Calculating SHAP values and predicting label...")
-                explainer = shap.Explainer(pipe)
-                shap_values = explainer([text])  # Pass text directly as a list
-                predictions = pipe(text)
-                prediction = predictions[0][0]['label']
-                st.write("SHAP values and prediction calculated.")
-                st.write(f"Prediction: {prediction}")
-                display_all_labels(predictions)
+    button_clicked = st.button('Analyze')
+    if button_clicked:
+        if text:
+            with st.spinner('Calculating...'):
+                # Model predictions and SHAP values
+                if pipe:
+                    st.write("Calculating SHAP values and predicting label...")
+                    explainer = shap.Explainer(pipe)
+                    shap_values = explainer([text])  # Pass text directly as a list
+                    predictions = pipe(text)
+                    prediction = predictions[0][0]['label']
+                    st.write("SHAP values and prediction calculated.")
 
 
 # Display SHAP values in a separate section
