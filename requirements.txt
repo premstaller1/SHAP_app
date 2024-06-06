@@ -11,4 +11,3 @@ streamlit-shap
 requests
 bs4
 numpy
-unicodedata
