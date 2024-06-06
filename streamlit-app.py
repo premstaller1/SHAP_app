@@ -7,6 +7,8 @@ from transformers import TextClassificationPipeline, AutoModelForSequenceClassif
 import matplotlib.pyplot as plt
 import numpy as np
 
+st.set_frame_height(1200)
+
 # Function to load the selected Hugging Face model
 def load_model(model_name):
     try:
@@ -31,11 +33,12 @@ def display_shap_values(shap_values, prediction):
 
 # Function to display all labels and their scores
 def display_all_labels(predictions):
-    st.text("All labels and scores:")
+    st.write("All labels and scores:")
     for label_score in predictions[0]:
         label = label_score['label'].capitalize()
         score = label_score['score']
         st.write(f"{label}: {score:.4f}")
+
 
 # Streamlit UI
 st.header('Sentiment Analysis')
