@@ -22,10 +22,10 @@ def load_model(model_name):
 def display_shap_values(model_name, shap_values, prediction):
     print("Displaying SHAP values...")
 
-    # Find the proper case label
-    predicted_label = label_mapping.get(prediction, prediction)
+    # Convert prediction to proper case
+    predicted_label = prediction.capitalize()
     st.text(f"Predicted label: {predicted_label}")
-
+    predicted_label
     # Display SHAP values
     st_shap(shap.plots.text(shap_values[:, :, predicted_label]))
 
