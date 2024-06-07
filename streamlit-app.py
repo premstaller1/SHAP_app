@@ -50,6 +50,7 @@ model_options = [
 selected_model = st.selectbox("Select Hugging Face model", model_options)
 
 # Check if "Own Model" is selected
+@st.cache_resource
 if selected_model == "Own Model":
     custom_model_name = st.text_input("Enter custom Hugging Face model name (optional)")
     if custom_model_name:
@@ -57,6 +58,7 @@ if selected_model == "Own Model":
 else:
     pipe = load_model(selected_model)
 
+@st.cache_data
 # Define sections for input and result
 with st.expander('Analyze Text', expanded=True):
     text = st.text_input('Text here: ')
@@ -75,12 +77,14 @@ with st.expander('Analyze Text', expanded=True):
 
 
 # Display SHAP values in a separate section
+@st.cache_data
 with st.expander('SHAP Values', expanded=True):
     if text:
         with st.spinner('Displaying SHAP values...'):
             if pipe:
                 display_shap_values(shap_values, prediction)
 
+@st.cache_data
 # Display SHAP values in a separate section
 with st.expander('SHAP Predictions', expanded=True):
     if text:
