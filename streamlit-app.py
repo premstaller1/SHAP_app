@@ -21,7 +21,7 @@ def load_model(model_name):
 
 # Function to display SHAP values and explanations based on model type
 @st.cache_data
-def display_shap_values(shap_values, prediction):
+def display_shap_values(_shap_values, prediction):
     print("Displaying SHAP values...")
         # Display SHAP values
     st_shap(shap.plots.text(shap_values))
