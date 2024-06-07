@@ -20,12 +20,14 @@ def load_model(model_name):
         return None
 
 # Function to display SHAP values and explanations based on model type
+@st.cache_data
 def display_shap_values(shap_values, prediction):
     print("Displaying SHAP values...")
         # Display SHAP values
     st_shap(shap.plots.text(shap_values))
 
 # Function to display all labels and their scores
+@st.cache_data
 def display_all_labels(predictions):
     st.write("All labels and scores:")
     for label_score in predictions[0]:
