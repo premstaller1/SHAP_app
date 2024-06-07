@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Function to load the selected Hugging Face model
+@st.cache_resource
 def load_model(model_name):
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
