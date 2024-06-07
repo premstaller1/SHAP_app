@@ -3,6 +3,7 @@ import streamlit as st
 import cleantext
 from streamlit_shap import st_shap
 import shap
+import transformers
 from transformers import TextClassificationPipeline, AutoModelForSequenceClassification, AutoTokenizer
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,8 +12,8 @@ import numpy as np
 @st.cache_resource
 def load_model(model_name):
     try:
-        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-        model = AutoModelForSequenceClassification.from_pretrained(model_name)
+        tokenizer = transformers.AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        model = transformers.AutoModelForSequenceClassification.from_pretrained(model_name)
         pipe = TextClassificationPipeline(model=model, tokenizer=tokenizer, max_length=64, truncation=True, top_k=None, padding='max_length')
         return pipe
     except Exception as e:
