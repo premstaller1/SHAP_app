@@ -164,14 +164,8 @@ elif input_method == "Upload CSV":
             st.pyplot(fig)
             
             with st.spinner('Calculating SHAP values...'):
-                progress_bar = st.progress(0)
-                num_steps = len(data['text'])
-                
-                def update_progress(progress):
-                    progress_bar.progress(progress / num_steps)
-
                 explainer = shap.Explainer(pipe)
-                shap_values = explainer(list(data['text']), progress_bar=update_progress)
+                shap_values = explainer(list(data['text']))
             
            # Display SHAP values
             st.write("SHAP values and explanations:")
