@@ -54,7 +54,7 @@ def display_all_labels(predictions):
 
 # Function to plot SHAP values by label
 @st.cache_data
-def plot_shap_values_by_label(shap_values, labels):
+def plot_shap_values_by_label(_shap_values, labels):
     for label in labels:
         st.write(f"SHAP values for {label}")
         shap.plots.bar(shap_values[:, :, label].mean(0), order=shap.Explanation.argsort)
