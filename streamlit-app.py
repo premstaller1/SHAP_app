@@ -52,6 +52,13 @@ def display_all_labels(predictions):
         score = label_score['score']
         st.write(f"{label}: {score:.4f}")
 
+# Function to plot SHAP values by label
+@st.cache_data
+def plot_shap_values_by_label(shap_values, labels):
+    for label in labels:
+        st.write(f"SHAP values for {label}")
+        shap.plots.bar(shap_values[:, :, label].mean(0), order=shap.Explanation.argsort)
+        st.pyplot()
 
 # Streamlit UI
 st.header('Sentiment Analysis')
@@ -169,6 +176,7 @@ elif input_method == "Upload CSV":
             
            # Display SHAP values
             st.write("SHAP values and explanations:")
+            plot_shap_values_by_label(shap_values, [pred[0]['label'] for pred in predictions[0]])
             shap.plots.bar(shap_values)
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
