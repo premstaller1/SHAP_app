@@ -171,7 +171,7 @@ elif input_method == "Upload CSV":
                     progress_bar.progress(progress / num_steps)
 
                 explainer = shap.Explainer(pipe)
-                shap_values = explainer(list(data['text']), check_additivity=False, progress_bar=update_progress)
+                shap_values = explainer(list(data['text']), progress_bar=update_progress)
             
            # Display SHAP values
             st.write("SHAP values and explanations:")
