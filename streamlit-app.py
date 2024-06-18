@@ -109,17 +109,17 @@ elif input_method == "Upload CSV":
         data = data.sample(n=10, random_state=1)
         
         # Select only the "tweet_text" column
-        if 'text' in data.columns:
-            data = data[["text"]]
+        if 'tweet_text' in data.columns:
+            data = data[["tweet_text"]]
 
             # Clean the tweets column
-            clean_tweets_column(data, 'text', 'text_clean')
+            clean_tweets_column(data, 'tweet_text', 'text')
             
             # Convert chat words
-            data['text_clean'] = data['text_clean'].apply(convert_chat_words)
+            data['text'] = data['text'].apply(convert_chat_words)
             
             # Tokenize the cleaned text
-            data['token_text'] = data['text_clean'].apply(tokenaise)
+            data['token_text'] = data['text'].apply(tokenaise)
             
             # Lemmatize the tokens
             data['token_text'] = data['token_text'].apply(lemmatize_text)
@@ -137,7 +137,7 @@ elif input_method == "Upload CSV":
             )
             # Run the pipeline and get predictions
             with st.spinner('Calculating Sentiment...'):
-                predictions = pipe(list(data['text_clean']))
+                predictions = pipe(list(data['text']))
 
             # Plot the predictions
             st.write("Predictions")
@@ -165,7 +165,7 @@ elif input_method == "Upload CSV":
             
             with st.spinner('Calculating SHAP values...'):
                 explainer = shap.Explainer(pipe)
-                shap_values = explainer(list(data['text_clean']))
+                shap_values = explainer(list(data['text']))
             
            # Display SHAP values
             st.write("SHAP values and explanations:")
@@ -173,10 +173,10 @@ elif input_method == "Upload CSV":
             st_shap(shap.plots.beeswarm(shap_values), height=300)
             
             explainer = shap.TreeExplainer(pipe.model)
-            shap_values_tree = explainer.shap_values(data['text_clean'])
-            X_display = data['text_clean']
+            shap_values_tree = explainer.shap_values(data['text'])
+            X_display = data['text']
             
             st_shap(shap.force_plot(explainer.expected_value, shap_values_tree[0,:], X_display.iloc[0]), height=200, width=1000)
             st_shap(shap.force_plot(explainer.expected_value, shap_values_tree[:1000,:], X_display.iloc[:1000]), height=400, width=1000)
         else:
-            st.error('The CSV file must contain a "text" column.')
+            st.error('The CSV file must contain a "tweet_text" column.')
