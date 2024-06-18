@@ -3,11 +3,6 @@
 def clean_tweets_column(df, column_name, cleaned_column):
     # Function to convert emojis to words using emoji library mapping
     def convert_emojis_to_words(tweet):
-        nltk.download('averaged_perceptron_tagger')
-        nltk.download('stopwords')
-        nltk.download('wordnet')
-        nltk.download('omw-1.4')
-        nltk.download('punkt')
         converted_text = emoji.demojize(tweet)
         return converted_text
     
