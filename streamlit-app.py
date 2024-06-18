@@ -77,7 +77,6 @@ else:
 # File upload for CSV
 uploaded_file = st.file_uploader("Upload CSV file", type="csv")
 
-@st.cache_data # Cache the data
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     
