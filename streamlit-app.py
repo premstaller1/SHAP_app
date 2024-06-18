@@ -163,10 +163,15 @@ elif input_method == "Upload CSV":
             ax.set_title('Ratio of Prediction Labels')
             st.pyplot(fig)
             
-            # Get SHAP values
             with st.spinner('Calculating SHAP values...'):
+                progress_bar = st.progress(0)
+                num_steps = len(data['text'])
+                
+                def update_progress(progress):
+                    progress_bar.progress(progress / num_steps)
+
                 explainer = shap.Explainer(pipe)
-                shap_values = explainer(list(data['text']))
+                shap_values = explainer(list(data['text']), check_additivity=False, progress_bar=update_progress)
             
            # Display SHAP values
             st.write("SHAP values and explanations:")
