@@ -136,8 +136,8 @@ elif input_method == "Upload CSV":
                 mime='text/csv',
             )
             # Run the pipeline and get predictions
-            st.spinner("Running sentiment analysis...")
-            predictions = pipe(list(data['text']))
+            with st.spinner('Calculating Sentiment...'):
+                predictions = pipe(list(data['text']))
 
             # Plot the predictions
             st.write("Predictions")
