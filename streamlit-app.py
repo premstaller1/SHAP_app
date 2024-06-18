@@ -164,12 +164,11 @@ elif input_method == "Upload CSV":
             st.pyplot(fig)
             
             # Get SHAP values
-            st.spinner('Calculating SHAP values...')
-            explainer = shap.Explainer(pipe)
-            shap_values = explainer(list(data['text']))
+            with st.spinner('Calculating SHAP values...'):
+                explainer = shap.Explainer(pipe)
+                shap_values = explainer(list(data['text']))
             
            # Display SHAP values
-            st.spinner('Creation plot for SHAP values...')
             st.write("SHAP values and explanations:")
             st_shap(shap.plots.waterfall(shap_values[0]), height=300)
             st_shap(shap.plots.beeswarm(shap_values), height=300)
