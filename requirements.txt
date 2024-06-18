@@ -14,5 +14,4 @@ numpy
 emoji
 nltk
 scikit-learn
-re
 string

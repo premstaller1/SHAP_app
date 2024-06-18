@@ -65,8 +65,8 @@ uploaded_file = st.file_uploader("Upload CSV file", type="csv")
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     
-    # Limit the data to 400 rows
-    data = data.head(400)
+    # Limit the data to 100 rows
+    data = data.head(100)
     
     # Select only the "tweet_text" column
     if 'tweet_text' in data.columns:
@@ -95,6 +95,21 @@ if uploaded_file is not None:
             file_name='cleaned_data.csv',
             mime='text/csv',
         )
+        # Run the pipeline and get predictions
+        st.write("Running sentiment analysis...")
+        predictions = pipe(list(data['text']))
+        
+        # Display predictions
+        st.write("Predictions:")
+        st.write(predictions)
+        
+        # Get SHAP values
+        explainer = shap.Explainer(pipe)
+        shap_values = explainer(list(data['text']))
+        
+        # Display SHAP values
+        st.write("SHAP values and explanations:")
+        display_shap_values(shap_values, predictions)
     else:
         st.error('The CSV file must contain a "tweet_text" column.')
 
