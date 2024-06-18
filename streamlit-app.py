@@ -105,8 +105,8 @@ elif input_method == "Upload CSV":
     if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)
         
-        # Limit the data to 100 rows
-        data = data.head(100)
+        # Select 100 random rows
+        data = data.sample(n=100, random_state=1)
         
         # Select only the "tweet_text" column
         if 'tweet_text' in data.columns:
