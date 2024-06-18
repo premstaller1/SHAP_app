@@ -1,4 +1,19 @@
+from sklearn.feature_extraction.text import CountVectorizer
+import nltk 
+import string
+import re
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet
+import emoji
+import re
 
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+nltk.download('punkt')
+from nltk.corpus import stopwords
 
 def clean_tweets_column(df, column_name, cleaned_column):
     # Function to convert emojis to words using emoji library mapping
