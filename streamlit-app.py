@@ -169,14 +169,6 @@ elif input_method == "Upload CSV":
             
            # Display SHAP values
             st.write("SHAP values and explanations:")
-            st_shap(shap.plots.waterfall(shap_values[0]), height=300)
-            st_shap(shap.plots.beeswarm(shap_values), height=300)
-            
-            explainer = shap.TreeExplainer(pipe.model)
-            shap_values_tree = explainer.shap_values(data['text'])
-            X_display = data['text']
-            
-            st_shap(shap.force_plot(explainer.expected_value, shap_values_tree[0,:], X_display.iloc[0]), height=200, width=1000)
-            st_shap(shap.force_plot(explainer.expected_value, shap_values_tree[:1000,:], X_display.iloc[:1000]), height=400, width=1000)
+            shap.plots.bar(shap_values)
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
