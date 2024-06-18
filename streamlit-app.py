@@ -74,88 +74,77 @@ if selected_model == "Own Model":
 else:
     pipe = load_model(selected_model)
 
-# File upload for CSV
-uploaded_file = st.file_uploader("Upload CSV file", type="csv")
+# Step 2: Choose input method
+input_method = st.radio("Choose input method", ("Text Input", "Upload CSV"))
 
-if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file)
-    
-    # Limit the data to 100 rows
-    data = data.head(100)
-    
-    # Select only the "tweet_text" column
-    if 'tweet_text' in data.columns:
-        data = data[["tweet_text"]]
+# Step 3: Input data analysis or uploaded data analysis
+if input_method == "Text Input":
+    with st.expander('Analyze Text', expanded=True):
+        text = st.text_input('Text here: ')
+        if text:
+            with st.spinner('Calculating...'):
+                # Model predictions and SHAP values
+                if pipe:
+                    explainer = shap.Explainer(pipe)
+                    shap_values = explainer([text])  # Pass text directly as a list
+                    predictions = pipe(text)
+                    prediction = predictions[0][0]['label']
+                    st.write(f"Prediction: {prediction}")
+                    display_all_labels(predictions)
 
-        # Clean the tweets column
-        clean_tweets_column(data, 'tweet_text', 'text')
-        
-        # Convert chat words
-        data['text'] = data['text'].apply(convert_chat_words)
-        
-        # Tokenize the cleaned text
-        data['token_text'] = data['text'].apply(tokenaise)
-        
-        # Lemmatize the tokens
-        data['token_text'] = data['token_text'].apply(lemmatize_text)
-        
-        st.write('Cleaned Data')
-        st.write(data)
-        
-        # Allow download of cleaned data
-        cleaned_data_csv = data.to_csv(index=False).encode('utf-8')
-        st.download_button(
-            label="Download cleaned data as CSV",
-            data=cleaned_data_csv,
-            file_name='cleaned_data.csv',
-            mime='text/csv',
-        )
-        # Run the pipeline and get predictions
-        st.write("Running sentiment analysis...")
-        predictions = pipe(list(data['text']))
-        
-        # Display predictions
-        st.write("Predictions:")
-        st.write(predictions)
-        
-        # Get SHAP values
-        explainer = shap.Explainer(pipe)
-        shap_values = explainer(list(data['text']))
-        
-        # Display SHAP values
-        st.write("SHAP values and explanations:")
-        display_shap_values(shap_values, predictions)
-    else:
-        st.error('The CSV file must contain a "tweet_text" column.')
+    # Display SHAP values in a separate section
+    with st.expander('SHAP Values', expanded=True):
+        if text:
+            with st.spinner('Displaying SHAP values...'):
+                if pipe:
+                    display_shap_values(shap_values)
 
+elif input_method == "Upload CSV":
+    uploaded_file = st.file_uploader("Upload CSV file", type="csv")
 
-# Define sections for input and result
-with st.expander('Analyze Text', expanded=True):
-    text = st.text_input('Text here: ')
-    if text:
-        with st.spinner('Calculating...'):
-            # Model predictions and SHAP values
-            if pipe:
-                st.write("Calculating SHAP values and predicting label...")
-                explainer = shap.Explainer(pipe)
-                shap_values = explainer([text])  # Pass text directly as a list
-                predictions = pipe(text)
-                prediction = predictions[0][0]['label']
-                st.write("SHAP values and prediction calculated.")
-                st.write(f"Prediction: {prediction}")
-                display_all_labels(predictions)
+    if uploaded_file is not None:
+        data = pd.read_csv(uploaded_file)
+        
+        # Limit the data to 100 rows
+        data = data.head(100)
+        
+        # Select only the "tweet_text" column
+        if 'tweet_text' in data.columns:
+            data = data[["tweet_text"]]
 
-
-# Display SHAP values in a separate section
-with st.expander('SHAP Values', expanded=True):
-    if text:
-        with st.spinner('Displaying SHAP values...'):
-            if pipe:
-                display_shap_values(shap_values, prediction)
-
-# Display SHAP values in a separate section
-with st.expander('SHAP Predictions', expanded=True):
-    if text:
-        with st.spinner('Displaying SHAP Predictions...'):
-            if pipe:
-                display_all_labels(predictions)
+            # Clean the tweets column
+            clean_tweets_column(data, 'tweet_text', 'text')
+            
+            # Convert chat words
+            data['text'] = data['text'].apply(convert_chat_words)
+            
+            # Tokenize the cleaned text
+            data['token_text'] = data['text'].apply(tokenaise)
+            
+            # Lemmatize the tokens
+            data['token_text'] = data['token_text'].apply(lemmatize_text)
+            
+            st.write('Cleaned Data')
+            st.write(data)
+            
+            # Allow download of cleaned data
+            cleaned_data_csv = data.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="Download cleaned data as CSV",
+                data=cleaned_data_csv,
+                file_name='cleaned_data.csv',
+                mime='text/csv',
+            )
+            # Run the pipeline and get predictions
+            st.write("Running sentiment analysis...")
+            predictions = pipe(list(data['text']))
+            
+            # Get SHAP values
+            explainer = shap.Explainer(pipe)
+            shap_values = explainer(list(data['text']))
+            
+            # Display SHAP values
+            st.write("SHAP values and explanations:")
+            display_shap_values(shap_values)
+        else:
+            st.error('The CSV file must contain a "tweet_text" column.')
