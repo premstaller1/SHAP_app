@@ -152,12 +152,24 @@ elif input_method == "Upload CSV":
             ax.set_xlabel('Scores')
             ax.set_title('Prediction Scores')
             st.pyplot(fig)
+
+            # Plot the ratio of prediction labels
+            st.write("Ratio of Prediction Labels")
+            label_counts = pd.Series(prediction_labels).value_counts()
+            fig, ax = plt.subplots()
+            ax.bar(label_counts.index, label_counts.values)
+            ax.set_xlabel('Labels')
+            ax.set_ylabel('Count')
+            ax.set_title('Ratio of Prediction Labels')
+            st.pyplot(fig)
             
             # Get SHAP values
+            st.spinner('Calculating SHAP values...')
             explainer = shap.Explainer(pipe)
             shap_values = explainer(list(data['text']))
             
            # Display SHAP values
+            st.spinner('Creation plot for SHAP values...')
             st.write("SHAP values and explanations:")
             st_shap(shap.plots.waterfall(shap_values[0]), height=300)
             st_shap(shap.plots.beeswarm(shap_values), height=300)
