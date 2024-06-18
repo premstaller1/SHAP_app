@@ -11,3 +11,8 @@ streamlit-shap
 requests
 bs4
 numpy
+emoji
+nltk
+scikit-learn
+re
+string
