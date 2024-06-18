@@ -8,6 +8,15 @@ from transformers import TextClassificationPipeline, AutoModelForSequenceClassif
 import matplotlib.pyplot as plt
 import numpy as np
 from preprocessing_script import clean_tweets_column, convert_chat_words, tokenaise, lemmatize_text
+from sklearn.feature_extraction.text import CountVectorizer
+import string
+import emoji
+import re
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet
 
 # Function to load the selected Hugging Face model
 @st.cache_resource
