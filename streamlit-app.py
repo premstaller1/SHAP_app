@@ -176,7 +176,8 @@ elif input_method == "Upload CSV":
             
            # Display SHAP values
             st.write("SHAP values and explanations:")
-            plot_shap_values_by_label(shap_values, [pred[0]['label'] for pred in predictions[0]])
+            unique_labels = list(set(prediction_labels))
+            plot_shap_values_by_label(shap_values, unique_labels)            
             shap.plots.bar(shap_values)
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
