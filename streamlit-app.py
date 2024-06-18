@@ -138,13 +138,35 @@ elif input_method == "Upload CSV":
             # Run the pipeline and get predictions
             st.write("Running sentiment analysis...")
             predictions = pipe(list(data['text']))
+
+            # Plot the predictions
+            st.write("Predictions")
+            prediction_labels = [pred[0]['label'] for pred in predictions]
+            prediction_scores = [pred[0]['score'] for pred in predictions]
+
+            fig, ax = plt.subplots()
+            ax.barh(range(len(prediction_labels)), prediction_scores, align='center')
+            ax.set_yticks(range(len(prediction_labels)))
+            ax.set_yticklabels(prediction_labels)
+            ax.invert_yaxis()  # labels read top-to-bottom
+            ax.set_xlabel('Scores')
+            ax.set_title('Prediction Scores')
+            st.pyplot(fig)
             
             # Get SHAP values
             explainer = shap.Explainer(pipe)
             shap_values = explainer(list(data['text']))
             
-            # Display SHAP values
+           # Display SHAP values
             st.write("SHAP values and explanations:")
-            display_shap_values(shap_values)
+            st_shap(shap.plots.waterfall(shap_values[0]), height=300)
+            st_shap(shap.plots.beeswarm(shap_values), height=300)
+            
+            explainer = shap.TreeExplainer(pipe.model)
+            shap_values_tree = explainer.shap_values(data['text'])
+            X_display = data['text']
+            
+            st_shap(shap.force_plot(explainer.expected_value, shap_values_tree[0,:], X_display.iloc[0]), height=200, width=1000)
+            st_shap(shap.force_plot(explainer.expected_value, shap_values_tree[:1000,:], X_display.iloc[:1000]), height=400, width=1000)
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
