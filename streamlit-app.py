@@ -69,18 +69,17 @@ def plot_shap_values_by_label(_shap_values, labels):
         shap.plots.bar(shap_values[:, :, label].mean(0), order=shap.Explanation.argsort)
 
 
-
+options = Options()
+options.add_argument("--disable-gpu")
+options.add_argument("--headless")
+@st.cache_resource
 def get_driver():
-    options = Options()
-    options.add_argument("--disable-gpu")
-    options.add_argument("--headless")
     return webdriver.Chrome(
-        service=Service(
-            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-        ),
+        executable_path=ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install(),
         options=options,
     )
 
+@st.cache_resource
 def fetch_tweet_text(url):
     st.title("Test Selenium")
     st.markdown("You should see some random Football match text below in about 21 seconds")
