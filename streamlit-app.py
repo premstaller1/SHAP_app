@@ -13,6 +13,10 @@ import string
 import emoji
 import re
 import nltk
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -59,6 +63,38 @@ def plot_shap_values_by_label(_shap_values, labels):
         st.write(f"SHAP values for {label}")
         shap.plots.bar(shap_values[:, :, label].mean(0), order=shap.Explanation.argsort)
 
+# Function to fetch tweet text using Selenium
+@st.cache_data
+def fetch_tweet_text(url):
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")  # Run Chrome in headless mode
+    driver = webdriver.Chrome(options=options)
+
+    # Open the tweet URL
+    print("Opening tweet URL")
+    driver.get(url)
+    time.sleep(10)  # Allow time for the page to load
+    print("Page loaded")
+
+    try:
+        tweet_text_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'div.css-146c3p1.r-bcqeeo.r-1ttztb7.r-qvutc0.r-37j5jr.r-1inkyih.r-16dba41.r-bnwqim.r-135wba7'))
+        )
+        tweet_text = tweet_text_element.text
+    except Exception as e:
+        print(f"Error fetching tweet text: {e}")
+        tweet_text = ""
+    finally:
+        driver.quit()
+    
+    return tweet_text
+
+@st.cache_data
+def process_tweet(url):
+    tweet_text = fetch_tweet_text(url)
+    print("Original Tweet Text:", tweet_text)
+    return tweet_text
+
 # Streamlit UI
 st.header('Sentiment Analysis')
 
@@ -81,7 +117,7 @@ else:
     pipe = load_model(selected_model)
 
 # Step 2: Choose input method
-input_method = st.radio("Choose input method", ("Text Input", "Upload CSV"))
+input_method = st.radio("Choose input method", ("Text Input", "Upload CSV", "Tweet Link"))
 
 # Step 3: Input data analysis or uploaded data analysis
 if input_method == "Text Input":
@@ -179,3 +215,28 @@ elif input_method == "Upload CSV":
             plot_shap_values_by_label(shap_values, unique_labels)            
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
+
+elif input_method == "Tweet Link":
+    tweet_url = st.text_input('Paste the tweet link here:')
+    if tweet_url:
+        with st.spinner('Fetching tweet text...'):
+            tweet_text = process_tweet(tweet_url)
+        st.write(f"Fetched Tweet Text: {tweet_text}")
+
+        if tweet_text:
+            with st.spinner('Calculating...'):
+                # Model predictions and SHAP values
+                if pipe:
+                    explainer = shap.Explainer(pipe)
+                    shap_values = explainer([tweet_text])  # Pass text directly as a list
+                    predictions = pipe(tweet_text)
+                    prediction = predictions[0][0]['label']
+                    st.write(f"Prediction: {prediction}")
+                    display_all_labels(predictions)
+
+            # Display SHAP values in a separate section
+            with st.expander('SHAP Values', expanded=True):
+                if tweet_text:
+                    with st.spinner('Displaying SHAP values...'):
+                        if pipe:
+                            display_shap_values(shap_values)

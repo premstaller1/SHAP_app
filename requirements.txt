@@ -14,3 +14,4 @@ numpy
 emoji
 nltk
 scikit-learn
+selenium
