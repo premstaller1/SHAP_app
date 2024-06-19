@@ -27,6 +27,7 @@ nltk.download('omw-1.4')
 nltk.download('punkt')
 
 #For twitter Link
+import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
