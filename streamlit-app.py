@@ -13,6 +13,11 @@ import string
 import emoji
 import re
 import nltk
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -59,50 +64,39 @@ def plot_shap_values_by_label(_shap_values, labels):
         st.write(f"SHAP values for {label}")
         shap.plots.bar(shap_values[:, :, label].mean(0), order=shap.Explanation.argsort)
 
-# Function to fetch tweet text using Selenium
-@st.cache_data
+@st.cache_resource
+def get_driver():
+    options = Options()
+    options.add_argument("--disable-gpu")
+    options.add_argument("--headless")
+    return webdriver.Chrome(
+        service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
+        options=options,
+    )
+
 def fetch_tweet_text(url):
-    with st.echo():
-        from selenium import webdriver
-        from selenium.webdriver.chrome.options import Options
-        from selenium.webdriver.chrome.service import Service
-        from webdriver_manager.chrome import ChromeDriverManager
-        from webdriver_manager.core.os_manager import ChromeType
-        from selenium.webdriver.common.by import By
-        from selenium.webdriver.support.ui import WebDriverWait
-        from selenium.webdriver.support import expected_conditions as EC
+    driver = get_driver()
+    driver.get(url)
+    time.sleep(10)  # Allow time for the page to load
 
-        @st.cache_resource
-        def get_driver():
-            return webdriver.Chrome(
-                service=Service(
-                    ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-                ),
-                options=options,
-            )
+    # Open the tweet URL
+    print("Opening tweet URL")
+    driver.get(url)
+    time.sleep(10)  # Allow time for the page to load
+    print("Page loaded")
 
-        options = Options()
-        options.add_argument("--disable-gpu")
-        options.add_argument("--headless")
-
-        # Open the tweet URL
-        print("Opening tweet URL")
-        driver.get(url)
-        time.sleep(10)  # Allow time for the page to load
-        print("Page loaded")
-
-        try:
-            tweet_text_element = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, 'div.css-146c3p1.r-bcqeeo.r-1ttztb7.r-qvutc0.r-37j5jr.r-1inkyih.r-16dba41.r-bnwqim.r-135wba7'))
-            )
-            tweet_text = tweet_text_element.text
-        except Exception as e:
-            print(f"Error fetching tweet text: {e}")
-            tweet_text = ""
-        finally:
-            driver.quit()
-        
-        return tweet_text
+    try:
+        tweet_text_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'div.css-146c3p1.r-bcqeeo.r-1ttztb7.r-qvutc0.r-37j5jr.r-1inkyih.r-16dba41.r-bnwqim.r-135wba7'))
+        )
+        tweet_text = tweet_text_element.text
+    except Exception as e:
+        print(f"Error fetching tweet text: {e}")
+        tweet_text = ""
+    finally:
+        driver.quit()
+    
+    return tweet_text
 
 @st.cache_data
 def process_tweet(url):
