@@ -14,5 +14,6 @@ numpy
 emoji
 nltk
 scikit-learn
-selenium
+streamlit
+seleniumbase
 webdriver-manager

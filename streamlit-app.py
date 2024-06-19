@@ -28,13 +28,10 @@ nltk.download('punkt')
 
 #For twitter Link
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 
 # Function to load the selected Hugging Face model
 @st.cache_resource
@@ -71,18 +68,28 @@ def plot_shap_values_by_label(_shap_values, labels):
         st.write(f"SHAP values for {label}")
         shap.plots.bar(shap_values[:, :, label].mean(0), order=shap.Explanation.argsort)
 
+
+
+@st.cache_resource
+def get_driver():
+    return webdriver.Chrome(
+        service=Service(
+            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+        ),
+        options=options,
+    )
+
+
 @st.cache_resource
 def fetch_tweet_text(url):
     st.title("Test Selenium")
     st.markdown("You should see some random Football match text below in about 21 seconds")
 
-    firefoxOptions = Options()
-    firefoxOptions.add_argument("--headless")
-    service = Service(GeckoDriverManager().install())
-    driver = webdriver.Firefox(
-        options=firefoxOptions,
-        service=service,
-    )
+    options = Options()
+    options.add_argument("--disable-gpu")
+    options.add_argument("--headless")
+    
+    driver = get_driver()
     driver.get(url)
     time.sleep(10)  # Allow time for the page to load
 
