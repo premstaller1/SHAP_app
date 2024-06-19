@@ -13,11 +13,6 @@ import string
 import emoji
 import re
 import nltk
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import ChromeType
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -64,15 +59,25 @@ def plot_shap_values_by_label(_shap_values, labels):
         st.write(f"SHAP values for {label}")
         shap.plots.bar(shap_values[:, :, label].mean(0), order=shap.Explanation.argsort)
 
-@st.cache_resource
-def get_driver():
+with st.echo():
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.chrome.service import Service
+    from webdriver_manager.chrome import ChromeDriverManager
+    from webdriver_manager.core.os_manager import ChromeType
+
+    @st.cache_resource
+    def get_driver():
+        return webdriver.Chrome(
+            service=Service(
+                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+            ),
+            options=options,
+        )
+
     options = Options()
     options.add_argument("--disable-gpu")
     options.add_argument("--headless")
-    return webdriver.Chrome(
-        service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
-        options=options,
-    )
 
 def fetch_tweet_text(url):
     driver = get_driver()
