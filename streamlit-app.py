@@ -28,10 +28,9 @@ nltk.download('punkt')
 
 #For twitter Link
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import ChromeType
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # Function to load the selected Hugging Face model
 @st.cache_resource
@@ -68,18 +67,14 @@ def plot_shap_values_by_label(_shap_values, labels):
         st.write(f"SHAP values for {label}")
         shap.plots.bar(shap_values[:, :, label].mean(0), order=shap.Explanation.argsort)
 
-
-options = Options()
-options.add_argument("--disable-gpu")
-options.add_argument("--headless")
 @st.cache_resource
 def get_driver():
-    return webdriver.Chrome(
-        service=Service(
-            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-        ),
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Remote(
+        command_executor="http://localhost:4444",
         options=options,
     )
+    return driver
 
 @st.cache_resource
 def fetch_tweet_text(url):
