@@ -15,5 +15,4 @@ emoji
 nltk
 scikit-learn
 selenium
-seleniumbase
 webdriver-manager
