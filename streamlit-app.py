@@ -76,6 +76,9 @@ def get_driver():
         service=Service(
             ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
         ),
+        options = Options()
+        options.add_argument("--disable-gpu")
+        options.add_argument("--headless")
         options=options,
     )
 
@@ -84,10 +87,6 @@ def get_driver():
 def fetch_tweet_text(url):
     st.title("Test Selenium")
     st.markdown("You should see some random Football match text below in about 21 seconds")
-
-    options = Options()
-    options.add_argument("--disable-gpu")
-    options.add_argument("--headless")
     
     driver = get_driver()
     driver.get(url)
