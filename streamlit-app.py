@@ -245,21 +245,3 @@ elif input_method == "Tweet Link":
         with st.spinner('Fetching tweet text...'):
             tweet_text = process_tweet(tweet_url)
         st.write(f"Fetched Tweet Text: {tweet_text}")
-
-        if tweet_text:
-            with st.spinner('Calculating...'):
-                # Model predictions and SHAP values
-                if pipe:
-                    explainer = shap.Explainer(pipe)
-                    shap_values = explainer([tweet_text])  # Pass text directly as a list
-                    predictions = pipe(tweet_text)
-                    prediction = predictions[0][0]['label']
-                    st.write(f"Prediction: {prediction}")
-                    display_all_labels(predictions)
-
-            # Display SHAP values in a separate section
-            with st.expander('SHAP Values', expanded=True):
-                if tweet_text:
-                    with st.spinner('Displaying SHAP values...'):
-                        if pipe:
-                            display_shap_values(shap_values)
