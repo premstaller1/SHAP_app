@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 import cleantext
-from streamlit_shap import st_shap
+#from streamlit_shap import st_shap
 import shap
 import transformers
 from transformers import TextClassificationPipeline, AutoModelForSequenceClassification, AutoTokenizer
