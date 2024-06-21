@@ -160,10 +160,6 @@ if input_method == "Text Input":
                     prediction = predictions[0][0]['label']
                     st.write(f"Prediction: {prediction}")
                     display_all_labels(predictions)
-
-    # Display SHAP values in a separate section
-    with st.expander('SHAP Values', expanded=True):
-        if text:
             with st.spinner('Displaying SHAP values...'):
                 if pipe:
                     display_shap_values(shap_values,predictions)
