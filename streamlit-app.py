@@ -188,7 +188,7 @@ elif input_method == "Upload CSV":
         data = pd.read_csv(uploaded_file)
         
         # Select 100 random rows
-        data = data.sample(n=20, random_state=1)
+        data = data.sample(n=30, random_state=1)
         
         # Select only the "tweet_text" column
         if 'tweet_text' in data.columns:
@@ -226,6 +226,7 @@ elif input_method == "Upload CSV":
             prediction_labels = [pred[0]['label'] for pred in predictions]
             prediction_scores = [pred[0]['score'] for pred in predictions]
             predictions_df = pd.DataFrame({'text': data['text'], 'prediction': prediction_labels, 'score': prediction_scores})
+            st.write(predictions_df)
 
             with st.expander("Showcasing Shap Values"):          
                 with st.spinner('Calculating SHAP values...'):
