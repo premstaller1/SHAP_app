@@ -236,26 +236,26 @@ elif input_method == "Upload CSV":
                     unique_labels = list(set(prediction_labels))
                     plot_shap_values_by_label(shap_values, unique_labels)  
 
-            fig, ax = plt.subplots()
+            top, ax = plt.subplots()
             ax.barh(range(len(prediction_labels)), prediction_scores, align='center')
             ax.set_yticks(range(len(prediction_labels)))
             ax.set_yticklabels(prediction_labels)
             ax.invert_yaxis()  # labels read top-to-bottom
             ax.set_xlabel('Scores')
             ax.set_title('Prediction Scores')
-            st.pyplot(fig)
-            plt.close(fig)
+            st.pyplot(top)
+            plt.close(top)
 
             # Plot the ratio of prediction labels
             st.write("Ratio of Prediction Labels")
             label_counts = pd.Series(prediction_labels).value_counts()
-            fig, ax = plt.subplots()
+            bottom, ax = plt.subplots()
             ax.bar(label_counts.index, label_counts.values)
             ax.set_xlabel('Labels')
             ax.set_ylabel('Count')
             ax.set_title('Ratio of Prediction Labels')
-            st.pyplot(fig) 
-            plt.close(fig)
+            st.pyplot(bottom) 
+            plt.close(bottom)
         
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
