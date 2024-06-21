@@ -226,6 +226,16 @@ elif input_method == "Upload CSV":
             prediction_labels = [pred[0]['label'] for pred in predictions]
             prediction_scores = [pred[0]['score'] for pred in predictions]
 
+            with st.expander("Showcasing Shap Values"):          
+                with st.spinner('Calculating SHAP values...'):
+                    explainer = shap.Explainer(pipe)
+                    shap_values = explainer(list(data['text']))
+                    
+                    #Display SHAP values
+                    st.write("SHAP values and explanations:")
+                    unique_labels = list(set(prediction_labels))
+                    plot_shap_values_by_label(shap_values, unique_labels)  
+
             fig, ax = plt.subplots()
             ax.barh(range(len(prediction_labels)), prediction_scores, align='center')
             ax.set_yticks(range(len(prediction_labels)))
@@ -249,16 +259,6 @@ elif input_method == "Upload CSV":
         
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
-
-    with st.expander("Showcasing Shap Values"):          
-        with st.spinner('Calculating SHAP values...'):
-            explainer = shap.Explainer(pipe)
-            shap_values = explainer(list(data['text']))
-            
-            #Display SHAP values
-            st.write("SHAP values and explanations:")
-            unique_labels = list(set(prediction_labels))
-            plot_shap_values_by_label(shap_values, unique_labels)  
 
 elif input_method == "Tweet Link":
     tweet_url = st.text_input('Paste the tweet link here:')
