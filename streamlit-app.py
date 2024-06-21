@@ -48,13 +48,12 @@ def load_model(model_name):
 
 # Function to display SHAP values and explanations based on model type
 @st.cache_data
-def display_shap_values(_shap_values, labels):
+def display_shap_values(_shap_values, label):
     print("Displaying SHAP values for each label...")
-    for label in labels:
-        st.write(f"### SHAP values for {label}")
-        # Create a SHAP text plot for the current label
-        shap_plot = shap.plots.text(_shap_values[:, :, labels])
-        st_shap(shap_plot, height=300)
+    st.write(f"### SHAP values for {label}")
+    # Create a SHAP text plot for the current label
+    shap_plot = shap.plots.text(_shap_values[:, :, label])
+    st_shap(shap_plot, height=300)
 
 # Function to display all labels and their scores
 @st.cache_data
