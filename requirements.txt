@@ -10,7 +10,7 @@ ipython
 streamlit-shap
 requests
 bs4
-numpy
+numpy==1.23.5
 emoji
 nltk
 scikit-learn
