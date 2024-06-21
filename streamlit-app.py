@@ -156,7 +156,7 @@ if input_method == "Text Input":
                     display_all_labels(predictions)
     with st.expander('Shap Values Showcased', expanded=True):
         if text:
-            with st.spinner('Displaying SHAP values...'):
+            with st.spinner('Displaying the SHAP label with the highest value...'):
                 if pipe:
                     # Extract labels from predictions
                     labels = [pred['label'] for pred in predictions[0]]
@@ -173,11 +173,13 @@ if input_method == "Text Input":
 
                     # Display SHAP values for the label with the highest value
                     display_shap_values(shap_values, max_shap_label)
-
+    with st.expander('Shap Values for all Labels', expanded=True):
+        if text:
+            with st.spinner('Displaying SHAP values aside from the highest.'):
+                if pipe:
                     # Selector for other labels
                     selected_label = st.selectbox("Select label to focus on", labels, index=labels.index(max_shap_label))
-                    if selected_label != max_shap_label:
-                        display_shap_values(shap_values, selected_label)
+                    display_shap_values(shap_values, selected_label)
 
 elif input_method == "Upload CSV":
     uploaded_file = st.file_uploader("Upload CSV file", type="csv")
