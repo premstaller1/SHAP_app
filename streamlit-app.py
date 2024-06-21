@@ -50,11 +50,11 @@ def load_model(model_name):
 @st.cache_data
 def display_shap_values(_shap_values, prediction):
     print("Displaying SHAP values...")
-         # Create a placeholder for the plot
+    # Create a placeholder for the plot
     placeholder = st.empty()
     
     # Generate the SHAP text plot with custom figsize
-    fig = plt.figure(figsize=(12, 8))
+    fig = plt.figure(figsize=(12, 50))
     shap_plot = shap.plots.text(_shap_values)
     
     # Display the SHAP plot in the placeholder
