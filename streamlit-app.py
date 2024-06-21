@@ -48,10 +48,13 @@ def load_model(model_name):
 
 # Function to display SHAP values and explanations based on model type
 @st.cache_data
-def display_shap_values(_shap_values, prediction):
-    print("Displaying SHAP values...")
-    shap_plot = shap.plots.text(_shap_values)
-    st_shap(shap_plot, height=300)
+def display_shap_values(_shap_values, labels):
+    print("Displaying SHAP values for each label...")
+    for label in labels:
+        st.write(f"### SHAP values for {label}")
+        # Create a SHAP text plot for the current label
+        shap_plot = shap.plots.text(_shap_values[:, :, labels])
+        st_shap(shap_plot, height=300)
 
 # Function to display all labels and their scores
 @st.cache_data
@@ -156,7 +159,9 @@ if input_method == "Text Input":
         if text:
             with st.spinner('Displaying SHAP values...'):
                 if pipe:
-                    display_shap_values(shap_values,predictions)
+                    # Extract labels from predictions
+                    labels = [pred['label'] for pred in predictions[0]]
+                    display_shap_values(shap_values, labels)
 
 elif input_method == "Upload CSV":
     uploaded_file = st.file_uploader("Upload CSV file", type="csv")
