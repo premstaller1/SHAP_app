@@ -154,9 +154,9 @@ if input_method == "Text Input":
                     prediction = predictions[0][0]['label']
                     st.write(f"Prediction: {prediction}")
                     display_all_labels(predictions)
-    with st.expander('Shap Values Showcased', expanded=True):
+    with st.expander('Showcasing Shap Values, starting with the highest value', expanded=True):
         if text:
-            with st.spinner('Displaying the SHAP label with the highest value...'):
+            with st.spinner('Plotting the SHAP label with the highest value...'):
                 if pipe:
                     # Extract labels from predictions
                     labels = [pred['label'] for pred in predictions[0]]
