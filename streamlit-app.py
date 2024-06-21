@@ -69,7 +69,7 @@ def display_all_labels(predictions):
 def plot_shap_values_by_label(_shap_values, labels):
     for label in labels:
         st.write(f"SHAP values for {label}")
-        st_shap(shap.plots.bar(shap_values[:, :, label].mean(0)))
+        st_shap(shap.plots.bar(shap_values[:, :, label]))
 
 
 options = Options()
@@ -246,6 +246,7 @@ elif input_method == "Upload CSV":
             st.pyplot(fig)          
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
+
     with st.expander("Showcasing Shap Values"):          
         with st.spinner('Calculating SHAP values...'):
             explainer = shap.Explainer(pipe)
