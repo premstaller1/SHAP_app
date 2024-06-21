@@ -158,7 +158,7 @@ if input_method == "Text Input":
         if text:
             with st.spinner('Displaying SHAP values...'):
                 if pipe:
-                    display_shap_values(shap_values)
+                    display_shap_values(shap_values,predictions)
 
 elif input_method == "Upload CSV":
     uploaded_file = st.file_uploader("Upload CSV file", type="csv")
