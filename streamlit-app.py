@@ -234,6 +234,7 @@ elif input_method == "Upload CSV":
             ax.set_xlabel('Scores')
             ax.set_title('Prediction Scores')
             st.pyplot(fig)
+            plt.close(fig)
 
             # Plot the ratio of prediction labels
             st.write("Ratio of Prediction Labels")
@@ -243,7 +244,9 @@ elif input_method == "Upload CSV":
             ax.set_xlabel('Labels')
             ax.set_ylabel('Count')
             ax.set_title('Ratio of Prediction Labels')
-            st.pyplot(fig)          
+            st.pyplot(fig) 
+            plt.close(fig)
+        
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
 
