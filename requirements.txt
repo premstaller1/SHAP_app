@@ -1,6 +1,6 @@
 clean-text
 pandas
-shap
+shap==0.45.1
 streamlit
 transformers
 torch
