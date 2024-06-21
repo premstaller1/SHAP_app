@@ -243,18 +243,18 @@ elif input_method == "Upload CSV":
             ax.set_xlabel('Labels')
             ax.set_ylabel('Count')
             ax.set_title('Ratio of Prediction Labels')
-            st.pyplot(fig)
-            
-            with st.spinner('Calculating SHAP values...'):
-                explainer = shap.Explainer(pipe)
-                shap_values = explainer(list(data['text']))
-            
-           # Display SHAP values
-            st.write("SHAP values and explanations:")
-            unique_labels = list(set(prediction_labels))
-            plot_shap_values_by_label(shap_values, unique_labels)            
+            st.pyplot(fig)          
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
+    with st.expander("Showcasing Shap Values"):          
+        with st.spinner('Calculating SHAP values...'):
+            explainer = shap.Explainer(pipe)
+            shap_values = explainer(list(data['text']))
+            
+            #Display SHAP values
+            st.write("SHAP values and explanations:")
+            unique_labels = list(set(prediction_labels))
+            plot_shap_values_by_label(shap_values, unique_labels)  
 
 elif input_method == "Tweet Link":
     tweet_url = st.text_input('Paste the tweet link here:')
