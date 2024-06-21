@@ -50,8 +50,8 @@ def load_model(model_name):
 @st.cache_data
 def display_shap_values(_shap_values, prediction):
     print("Displaying SHAP values...")
-    shap_plot = shap.plots.text(_shap_values, height=300)
-    st_shap(shap_plot)
+    shap_plot = shap.plots.text(_shap_values)
+    st_shap(shap_plot, height=300)
 
 # Function to display all labels and their scores
 @st.cache_data
