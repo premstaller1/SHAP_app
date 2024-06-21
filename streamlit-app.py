@@ -51,6 +51,7 @@ def load_model(model_name):
 def display_shap_values(_shap_values, labels):
     print("Displaying SHAP values for each label...")
     for label in labels:
+        print(label)
         st.write(f"### SHAP values for {label}")
         # Create a SHAP text plot for the current label
         shap_plot = shap.plots.text(_shap_values[:, :, labels])
