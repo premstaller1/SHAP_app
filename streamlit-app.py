@@ -188,7 +188,7 @@ elif input_method == "Upload CSV":
         data = pd.read_csv(uploaded_file)
         
         # Select 100 random rows
-        data = data.sample(n=5, random_state=1)
+        data = data.sample(n=100, random_state=1)
         
         # Select only the "tweet_text" column
         if 'tweet_text' in data.columns:
@@ -225,6 +225,7 @@ elif input_method == "Upload CSV":
             st.write("Predictions")
             prediction_labels = [pred[0]['label'] for pred in predictions]
             prediction_scores = [pred[0]['score'] for pred in predictions]
+            display_all_labels(predictions)
 
             with st.expander("Showcasing Shap Values"):          
                 with st.spinner('Calculating SHAP values...'):
@@ -235,27 +236,27 @@ elif input_method == "Upload CSV":
                     st.write("SHAP values and explanations:")
                     unique_labels = list(set(prediction_labels))
                     plot_shap_values_by_label(shap_values, unique_labels)  
+            with st.expander("Showcasing Predictions"):          
+                top, ax = plt.subplots()
+                ax.barh(range(len(prediction_labels)), prediction_scores, align='center')
+                ax.set_yticks(range(len(prediction_labels)))
+                ax.set_yticklabels(prediction_labels)
+                ax.invert_yaxis()  # labels read top-to-bottom
+                ax.set_xlabel('Scores')
+                ax.set_title('Prediction Scores')
+                st.pyplot(top)
+                plt.close(top)
 
-            top, ax = plt.subplots()
-            ax.barh(range(len(prediction_labels)), prediction_scores, align='center')
-            ax.set_yticks(range(len(prediction_labels)))
-            ax.set_yticklabels(prediction_labels)
-            ax.invert_yaxis()  # labels read top-to-bottom
-            ax.set_xlabel('Scores')
-            ax.set_title('Prediction Scores')
-            st.pyplot(top)
-            plt.close(top)
-
-            # Plot the ratio of prediction labels
-            st.write("Ratio of Prediction Labels")
-            label_counts = pd.Series(prediction_labels).value_counts()
-            bottom, ax = plt.subplots()
-            ax.bar(label_counts.index, label_counts.values)
-            ax.set_xlabel('Labels')
-            ax.set_ylabel('Count')
-            ax.set_title('Ratio of Prediction Labels')
-            st.pyplot(bottom) 
-            plt.close(bottom)
+                # Plot the ratio of prediction labels
+                st.write("Ratio of Prediction Labels")
+                label_counts = pd.Series(prediction_labels).value_counts()
+                bottom, ax = plt.subplots()
+                ax.bar(label_counts.index, label_counts.values)
+                ax.set_xlabel('Labels')
+                ax.set_ylabel('Count')
+                ax.set_title('Ratio of Prediction Labels')
+                st.pyplot(bottom) 
+                plt.close(bottom)
         
         else:
             st.error('The CSV file must contain a "tweet_text" column.')
